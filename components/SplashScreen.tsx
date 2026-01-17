@@ -1,15 +1,15 @@
-
-import React from 'react';
+import React from "react";
+import { Logo } from "./Logo";
 
 export const SplashScreen: React.FC = () => {
   return (
     <div className="fixed inset-0 z-[100] bg-background-dark flex flex-col items-center justify-center">
       <div className="relative flex flex-col items-center gap-6">
         {/* Animated Logo */}
-        <div className="size-24 bg-primary rounded-2xl flex items-center justify-center animate-logo-draw shadow-[0_0_50px_rgba(244,202,37,0.3)]">
-          <span className="material-symbols-outlined text-background-dark text-6xl font-black">trending_up</span>
+        <div className="size-30 rounded-2xl flex items-center justify-center animate-logo-container overflow-visible p-2">
+          <Logo animated={true} color="#f4ca25" className="w-full h-full" />
         </div>
-        
+
         {/* Animated Brand Name */}
         <div className="flex flex-col items-center gap-1 overflow-hidden">
           <h1 className="text-white text-4xl font-black tracking-tighter uppercase animate-slide-up [animation-delay:400ms]">
