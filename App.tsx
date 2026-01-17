@@ -29,7 +29,7 @@ const App: React.FC = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowSplash(false);
-    }, 2800);
+    }, 2000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -149,9 +149,9 @@ const App: React.FC = () => {
             <a href="#" className="hover:text-primary">
               Instagram
             </a>
-            <a href="#" className="hover:text-primary">
+            {/* <a href="#" className="hover:text-primary">
               TikTok
-            </a>
+            </a> */}
           </div>
         </div>
       </footer>
