@@ -91,7 +91,7 @@ export const Navbar: React.FC = () => {
             href="#contact"
             className="hidden md:flex items-center justify-center rounded-full px-8 h-11 bg-primary text-background-dark text-xs font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all"
           >
-            Build Your Story
+            BOOK YOUR FREE CONSULTATION
           </a>
           <button
             onClick={handleMenuToggle}
@@ -187,7 +187,7 @@ export const Navbar: React.FC = () => {
                   onClick={handleLinkClick}
                   className="flex items-center justify-center rounded-full px-8 h-12 bg-primary text-background-dark text-xs font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all w-full"
                 >
-                  Build Your Story
+                  BOOK YOUR FREE CONSULTATION
                 </a>
               </div>
             </nav>

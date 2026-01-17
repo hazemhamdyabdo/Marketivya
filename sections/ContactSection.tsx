@@ -1,8 +1,85 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
+import { Toast } from "../components/Toast";
 
 export const ContactSection: React.FC = () => {
+  const [submitted, setSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const handleCloseToast = useCallback(() => setShowToast(false), []);
+  const [errors, setErrors] = useState({
+    name: "",
+    phone: "",
+  });
+  const phoneRegex =
+    /^(?:\+20|20|01)\d{9}$|^(?:\+971|971|05)\d{8}$|^(?:\+966|966|05)\d{8}$/;
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setErrors({ name: "", phone: "" });
+    setIsLoading(true);
+    const timestamp = new Intl.DateTimeFormat("en-US", {
+      timeZone: "Africa/Cairo",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    }).format();
+    const name = e.target.Name.value;
+    const phone = e.target.Phone.value;
+    if (name.trim() === "") {
+      setErrors({ ...errors, name: "Name is required" });
+      setIsLoading(false);
+      return;
+    }
+
+    if (phone.trim() === "") {
+      setErrors({ ...errors, phone: "Phone is required" });
+      setIsLoading(false);
+      return;
+    }
+
+    // check if phone is valid phone number not including text
+    if (!phoneRegex.test(phone)) {
+      setErrors({
+        ...errors,
+        phone: "Invalid phone number. Please enter a valid phone number.",
+      });
+      setIsLoading(false);
+      return;
+    } else {
+      setErrors({ ...errors, phone: "" });
+    }
+
+    if (errors.name || errors.phone) {
+      setIsLoading(false);
+      return;
+    }
+    fetch(
+      "https://script.google.com/macros/s/AKfycbxbTSlToGSNCGFKf9qBsnDqNC95xpOX3xzevcuw9BM5-VRKRXZeyHI2NoNdy5lQsdig1A/exec",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: `Timestamp=${timestamp}&Name=${name}&Phone=${phone}`,
+      }
+    )
+      .then((response) => response.text())
+      .then((data) => {
+        setSubmitted(true);
+        setIsLoading(false);
+        setShowToast(true);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        setIsLoading(false);
+      });
+  };
   return (
     <section className="py-24 px-6 md:px-20 bg-background-dark relative overflow-hidden">
+      {showToast && <Toast onClose={handleCloseToast} />}
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-20 relative z-10">
         <div className="flex-1">
           <h2 className="text-5xl md:text-7xl font-black tracking-tighter text-white mb-8">
@@ -49,8 +126,8 @@ export const ContactSection: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex-1 glass-card p-10 md:p-12 rounded-[3rem] border-white/5 bg-white/[0.02] flex flex-col items-center justify-center text-center">
-          <div className="mb-8">
+        <div className="flex-1 glass-card p-10 md:p-12 rounded-[3rem] border-white/5 bg-white/[0.02]">
+          {/* <div className="mb-8">
             <div className="size-20 rounded-3xl bg-[#25D366]/20 flex items-center justify-center border border-[#25D366]/30 mx-auto mb-6">
               <svg
                 className="w-12 h-12 text-[#25D366]"
@@ -68,8 +145,37 @@ export const ContactSection: React.FC = () => {
               Get in touch with us directly on WhatsApp for instant support and
               personalized assistance.
             </p>
-          </div>
-          <a
+          </div> */}
+          <h3 className="text-2xl font-black mb-8 italic">
+            Request a Performance Audit
+          </h3>
+          <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
+            <input
+              className="bg-white/5 border border-white/10 rounded-2xl p-5 outline-none focus:border-primary transition-all text-white placeholder-slate-600"
+              placeholder="Name"
+              name="Name"
+            />
+            {errors.name && (
+              <p className="text-red-500 text-sm">{errors.name}</p>
+            )}
+            <input
+              className="bg-white/5 border border-white/10 rounded-2xl p-5 outline-none focus:border-primary transition-all text-white placeholder-slate-600"
+              placeholder="Phone Number"
+              type="tel"
+              name="Phone"
+            />
+            {errors.phone && (
+              <p className="text-red-500 text-sm">{errors.phone}</p>
+            )}
+            <button
+              type="submit"
+              className="w-full bg-primary text-background-dark font-black py-5 rounded-2xl text-lg uppercase tracking-widest shadow-2xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all"
+            >
+              {isLoading ? "Submitting..." : "Start Your Journey"}
+            </button>
+          </form>
+
+          {/* <a
             href="https://wa.me/971561073053"
             target="_blank"
             rel="noopener noreferrer"
@@ -101,7 +207,7 @@ export const ContactSection: React.FC = () => {
           </a>
           <p className="text-slate-500 text-sm mt-6 font-medium">
             +971 56 107 3053
-          </p>
+          </p> */}
         </div>
       </div>
 
